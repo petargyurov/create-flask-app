@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, json
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -34,11 +34,15 @@ def create_app():
 				e = InternalServerError()
 			else:
 				raise e
-		return {
+
+		response = e.get_response()
+		response.data = json.dumps({
 			"code"       : e.code,
 			"name"       : e.name,
 			"description": e.description,
-		}
+		})
+		response.content_type = "application/json"
+		return response
 
 	return app
 
