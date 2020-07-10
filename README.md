@@ -16,6 +16,7 @@ Click on each feature to read more about it.
 | Auth  |    TODO    |    TODO    |   N/A    |
 | Logging  |    TODO    |    TODO    |   N/A    |
 | Caching  |    ✔️    |    Support for caching endpoints and memoizing functions    |   Flask-Caching    |
+| Scheduler  |    TODO    |    TODO    |   N/A    |
 | Config  |    ✔️    |    TODO    |   N/A    |
 | ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
 | Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
