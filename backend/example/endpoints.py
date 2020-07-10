@@ -1,6 +1,7 @@
 from marshmallow import fields
 from werkzeug.exceptions import NotFound
 
+from backend import cache
 from backend.api import APIBlueprint
 from backend.models import User
 
@@ -19,6 +20,7 @@ example = APIBlueprint('example', __name__)
 		'email'   : fields.String(),
 	}
 )
+@cache.cached(timeout=20)
 def get_user(id):
 	user = User.query.get(id)
 	if not user:

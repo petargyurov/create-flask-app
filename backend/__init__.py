@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_caching import Cache
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException, InternalServerError
 
+cache = Cache()
 cors = CORS()
 db = SQLAlchemy()
 migrate = Migrate()
@@ -12,6 +14,8 @@ migrate = Migrate()
 def create_app():
 	app = Flask(__name__)
 	app.config.from_pyfile('backend.cfg')
+
+	cache.init_app(app, config=app.config['CACHE_CONFIG'])
 	cors.init_app(app, supports_credentials=app.config['SUPPORT_CREDENTIALS'],
 				  origins=[app.config['ORIGIN']])
 	db.init_app(app)
