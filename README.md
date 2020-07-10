@@ -15,7 +15,7 @@ Click on each feature to read more about it.
 | REST API  |    ✔️    |    Slight modification on top of Flask's usual Blueprint object to allow for easy declaration of input and output schemas    |   Flask, Marshmallow, Webargs    |
 | Auth  |    TODO    |    TODO    |   N/A    |
 | Logging  |    TODO    |    TODO    |   N/A    |
-| Caching  |    TODO    |    TODO    |   N/A    |
+| Caching  |    ✔️    |    Support for caching endpoints and memoizing functions    |   Flask-Caching    |
 | Config  |    ✔️    |    TODO    |   N/A    |
 | ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
 | Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
