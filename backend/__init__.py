@@ -15,7 +15,7 @@ migrate = Migrate()
 
 def create_app():
 	app = Flask(__name__)
-	app.config.from_pyfile('backend.cfg')
+	app.config.from_pyfile('config.py')
 
 	cache.init_app(app, config=app.config['CACHE_CONFIG'])
 	cors.init_app(app, supports_credentials=app.config['SUPPORT_CREDENTIALS'],
