@@ -10,18 +10,18 @@ typical burdens associated with backend development.
 ## Features
 Click on each feature to read more about it.
 
-| Feature  |  Description |  Library |
-|---|---|---|
-| Logging  |    TODO    |   N/A    |
-| Caching  |    TODO    |   N/A    |
-| Config  |    TODO    |   N/A    |
-| ORM  |    TODO    |   N/A    |
-| Migrations  |    TODO    |   N/A    |
-| Auto-documentation  |    TODO    |   N/A    |
-| Admin Dashboard  |    TODO    |   N/A    |
-| Utils  |    TODO    |   N/A    |
+| Feature  | Status  |  Description |  Library |
+|---|---|---|---|
+| REST API  |    ✔️    |    Slight modification on top of Flask's usual Blueprint object to allow for easy declaration of input and output schemas    |   Flask, Marshmallow, Webargs    |
+| Auth  |    TODO    |    TODO    |   N/A    |
+| Logging  |    TODO    |    TODO    |   N/A    |
+| Caching  |    TODO    |    TODO    |   N/A    |
+| Config  |    ✔️    |    TODO    |   N/A    |
+| ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
+| Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
+| Auto-documentation  |    TODO    |    TODO    |   N/A    |
+| Admin Dashboard  |    TODO    |    TODO    |   N/A    |
+| Utils  |    TODO    |    TODO    |   N/A    |
 
 ## Why Flask?
 Because I like Flask; it's flexible and powerful.
-
-    
