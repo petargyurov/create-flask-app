@@ -8,7 +8,7 @@ cors = CORS()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    cors.init_app(app, supports_credentials=app.config['SUPPORTS_CREDENTIALS'],
+    cors.init_app(app, supports_credentials=app.config['SUPPORT_CREDENTIALS'],
                   origins=[app.config['ORIGIN']])
 
     from backend.example.endpoints import example
