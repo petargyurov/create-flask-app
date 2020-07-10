@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_caching import Cache
 from flask_cors import CORS
@@ -28,8 +30,10 @@ def create_app():
 	@app.errorhandler(Exception)
 	def handle_exception(e):
 		if not isinstance(e, HTTPException):
-			e = InternalServerError()
-
+			if os.environ['FLASK_ENV'] == 'production':
+				e = InternalServerError()
+			else:
+				raise e
 		return {
 			"code"       : e.code,
 			"name"       : e.name,
