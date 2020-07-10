@@ -1,41 +1,31 @@
-from backend.api import APIBlueprint
 from marshmallow import fields
-from webargs import dict2schema
-from werkzeug.exceptions import NotImplemented
+from werkzeug.exceptions import NotFound
+
+from backend.api import APIBlueprint
+from backend.models import User
 
 example = APIBlueprint('example', __name__)
 
 
 @example.api(
-	http_path='/example_get',
+	http_path='/user',
 	http_method='GET',
 	input_schema={
-		'animal': fields.String(),
+		'id': fields.Integer(),
 	},
 	output_schema={
-		'animal': fields.Nested(dict2schema({
-			'name': fields.String(),
-			'type': fields.String(),
-			'age': fields.Integer()
-		}))
+		'id'      : fields.Integer(),
+		'username': fields.String(),
+		'email'   : fields.String(),
 	}
 )
-def example_get(animal):
-	if animal == 'cat':
-		info = {
-			'name': 'Mr. Tibbles',
-			'type': 'Cat',
-			'age': 8
-		}
-	elif animal == 'dog':
-		info = {
-			'name': 'Floofy',
-			'type': 'Dog',
-			'age' : 7
-		}
-	else:
-		raise NotImplemented
+def get_user(id):
+	user = User.query.get(id)
+	if not user:
+		raise NotFound
 
 	return {
-		'animal': info
+		'id'      : user.id,
+		'username': user.username,
+		'email'   : user.email,
 	}
