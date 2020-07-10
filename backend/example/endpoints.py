@@ -20,7 +20,7 @@ example = APIBlueprint('example', __name__)
 		'email'   : fields.String(),
 	}
 )
-@cache.cached(timeout=20)
+@cache.memoize(timeout=20)
 def get_user(id):
 	user = User.query.get(id)
 	if not user:
