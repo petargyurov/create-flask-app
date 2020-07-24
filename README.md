@@ -14,10 +14,10 @@ Click on each feature to read more about it.
 |---|---|---|---|
 | REST API  |    ✔️    |    Slight modification on top of Flask's usual Blueprint object to allow for easy declaration of input and output schemas    |   Flask, Marshmallow, Webargs    |
 | Auth  |    TODO    |    TODO    |   N/A    |
-| Error Handling  |    ✔️   |    Customisable JSON error responses with obfuscation for non-HTTP errors in a production environment    |   N/A    |
+| Error Handling  |    ✔️   |    Customisable JSON error responses with obfuscation for non-HTTP errors in a production environment    |   Flask    |
 | Logging  |    ✔️  |    Pre-configured, enriched logging with a console handler and a rotating file handler    |   Default Python Logging Library    |
 | Caching  |    ✔️    |    Support for caching endpoints and memoizing functions    |   Flask-Caching    |
-| Scheduler  |    TODO    |    TODO    |   N/A    |
+| Scheduler  |    ✔️   |    A scheduler lets you schedule code in your app to be run periodically or at specifc times.    |   Flask-APScheduler (APScheduler)    |
 | Config  |    ✔️    |    TODO    |   N/A    |
 | ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
 | Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
