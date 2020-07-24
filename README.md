@@ -28,6 +28,66 @@ Click on each feature to read more about it.
 ## Why Flask?
 Because I like Flask; it's flexible and powerful.
 
+## Getting Started
+
+### Create the config file
+Create a `config.py` file under your app module. In this case under `backend`.
+This file is picked up when you create the app and instantiates a number of 
+important variables required for the app to work. It's the place where you will
+store secrets, like database passwords, so **never commit this file to your repository.**
+
+Here is a the minimal requirement for what your config file should look like. 
+
+```python
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+
+# FLASK
+APP_HOST = "localhost"
+APP_PORT = 5000
+SECRET_KEY = "<your_secret_key>"
+
+# CACHE
+CACHE_CONFIG = {
+	"CACHE_TYPE"           : "simple",
+	"CACHE_DEFAULT_TIMEOUT": 60,
+}
+
+# CORS
+ALLOWED_ORIGINS = ["localhost"]
+
+# DATABASE
+DATABASE_USER = "backend"
+DATABASE_PASSWORD = "<your_database_password>"
+DATABASE_HOST = "localhost"
+DATABASE_PORT = 5432
+DATABASE_NAME = "backend"
+SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# SCHEDULER
+JOBS = [
+	{
+		'id'              : 'example',
+		'func'            : 'backend.tasks.example_task:print_number_of_users',
+		'trigger'         : 'interval',
+		'seconds'         : 10,
+		'replace_existing': True,
+	},
+]
+SCHEDULER_TIMEZONE = 'UTC'
+SCHEDULER_JOBSTORES = {
+	'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+}
+SCHEDULER_EXECUTORS = {
+	'default': {'type': 'threadpool', 'max_workers': 20}
+}
+SCHEDULER_JOB_DEFAULTS = {
+	'coalesce'     : False,
+	'max_instances': 1
+}
+SCHEDULER_API_ENABLED = True
+```
+
 ## Error Handling
 
 When your application raises an error, it sends a custom JSON response with the 
@@ -81,12 +141,12 @@ with two handlers:
 - (rotating) file output 
 
 The default output looks like this:
-```python
+```
 2020-07-23 16:28:35,502 | ERROR | example.endpoints.get_user::27 | GET | /user | id=4 | 404 NOT FOUND | User with ID=4 not found in database
 2020-07-23 16:29:02,868 | INFO | backend.__init__.log_request::66 | GET | /user | id=1 | 200 OK
 ```
 which is based on this format:
-```python
+```
 datetime | level | location_in_code | method | path | query_params | status | description
 ```
 
