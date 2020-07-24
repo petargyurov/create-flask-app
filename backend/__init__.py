@@ -25,13 +25,12 @@ def create_app():
 	app.config.from_pyfile('config.py')
 
 	cache.init_app(app, config=app.config['CACHE_CONFIG'])
-	cors.init_app(app, supports_credentials=app.config['SUPPORT_CREDENTIALS'],
-				  origins=[app.config['ORIGIN']])
+	cors.init_app(app, origins=app.config['ALLOWED_ORIGINS'])
 	db.init_app(app)
 	migrate.init_app(app, db)
 
 	scheduler.init_app(app)
-	scheduler.start()
+	# scheduler.start()
 
 	from backend.example.endpoints import example
 	app.register_blueprint(example)
