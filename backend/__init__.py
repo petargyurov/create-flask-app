@@ -3,6 +3,7 @@ import os
 from logging.config import dictConfig
 
 from flask import Flask, json
+from flask_apscheduler import APScheduler
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -16,6 +17,7 @@ cache = Cache()
 cors = CORS()
 db = SQLAlchemy()
 migrate = Migrate()
+scheduler = APScheduler()
 
 
 def create_app():
@@ -27,6 +29,9 @@ def create_app():
 				  origins=[app.config['ORIGIN']])
 	db.init_app(app)
 	migrate.init_app(app, db)
+
+	scheduler.init_app(app)
+	scheduler.start()
 
 	from backend.example.endpoints import example
 	app.register_blueprint(example)
