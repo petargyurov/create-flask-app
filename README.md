@@ -21,6 +21,7 @@ Click on each feature to read more about it.
 | Config  |    ✔️    |    TODO    |   N/A    |
 | ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
 | Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
+| Tests  |    TODO    |    TODO    |   N/A    |
 | Auto-documentation  |    TODO    |    TODO    |   N/A    |
 | Admin Dashboard  |    TODO    |    TODO    |   N/A    |
 | Utils  |    TODO    |    TODO    |   N/A    |
