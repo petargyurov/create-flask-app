@@ -30,7 +30,7 @@ def create_app():
 	migrate.init_app(app, db)
 
 	scheduler.init_app(app)
-	# scheduler.start()
+	scheduler.start()
 
 	from backend.example.endpoints import example
 	app.register_blueprint(example)
