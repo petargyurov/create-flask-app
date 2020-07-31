@@ -1,12 +1,14 @@
 import pytest
 
-from backend import create_app
+from backend import create_app, scheduler
 
 
 @pytest.fixture
 def app():
     app = create_app()
-    return app
+    yield app
+    # teardown
+    scheduler.shutdown()
 
 
 @pytest.fixture
