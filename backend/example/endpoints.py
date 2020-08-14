@@ -1,28 +1,32 @@
+from flask_rebar import ResponseSchema
+from flask_rebar.errors import NotFound
 from marshmallow import fields
 from werkzeug.exceptions import NotFound
 
-from backend import cache
-from backend.api import APIBlueprint
+from backend import cache, rebar, registry
 from backend.models import User
 
-example = APIBlueprint('example', __name__)
+
+class UserSchema(ResponseSchema):
+	id = fields.Integer()
+	username = fields.String()
+	email = fields.String()
 
 
-@example.api(
-	http_path='/user',
-	http_method='GET',
-	input_schema={
-		'id': fields.Integer(),
-	},
-	output_schema={
-		'id'      : fields.Integer(),
-		'username': fields.String(),
-		'email'   : fields.String(),
-	}
+class GetUserSchema(ResponseSchema):
+	id = fields.Integer()
+
+
+@registry.handles(
+	rule='/user',
+	method='GET',
+	query_string_schema=GetUserSchema(),
+	response_body_schema=UserSchema()
 )
 @cache.memoize(timeout=20)
-def get_user(id):
-	user = User.query.get(id)
+def get_user():
+	args = rebar.validated_args
+	user = User.query.get(args['id'])
 	if not user:
 		raise NotFound
 
