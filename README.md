@@ -7,28 +7,36 @@ a REST API. It's purpose is to bootstrap backend projects with all the necessary
 requisites of a good backend and alleviate the developer from some of the
 typical burdens associated with backend development.
 
+## TODO
+- Authenticate Scheduler API
+- Authenticate Swagger API
+- General endpoint authentication
+- Add database mocking to test examples
+- Admin dashboard
+    - Authentication
+- Utils
+    - decide on what to include 
+
 ## Features
 Click on each feature to read more about it.
 
 | Feature  | Status  |  Description |  Library |
 |---|---|---|---|
-| REST API  |    ✔️    |    Slight modification on top of Flask's usual Blueprint object to allow for easy declaration of input and output schemas    |   Flask, Marshmallow, Webargs    |
+| REST API  |    ✔️    |    Support for input and output schemas    |   Flask-Rebar    |
 | Auth  |    TODO    |    TODO    |   N/A    |
-| Error Handling  |    ✔️   |    Customisable JSON error responses with obfuscation for non-HTTP errors in a production environment    |   Flask    |
+| Error Handling  |    ✔️   |    Customisable JSON error responses    |   Flask-Rebar    |
 | Logging  |    ✔️  |    Pre-configured, enriched logging with a console handler and a rotating file handler    |   Default Python Logging Library    |
 | Caching  |    ✔️    |    Support for caching endpoints and memoizing functions    |   Flask-Caching    |
 | Scheduler  |    ✔️   |    A scheduler lets you schedule code in your app to be run periodically or at specifc times.    |   Flask-APScheduler (APScheduler)    |
-| Config  |    ✔️    |    TODO    |   N/A    |
+| Config  |    ✔️    |    A data file used to configure your app. It separates sensitive data from your codebase.    |   Flask    |
 | ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
 | Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
 | Tests  |    In Progress    |    Example tests for app creation, endpoints, etc. Uses a mock database.    |   pytest-flask (pytest)    |
 | Coverage  |    TODO    |    TODO    |   N/A    |
-| Auto-documentation  |    TODO    |    TODO    |   N/A    |
+| Auto-documentation  |    ✔️    |    Automatically generate documentation for your endpoints using the OpenAPI spec.    |   Flask-Rebar    |
 | Admin Dashboard  |    TODO    |    TODO    |   N/A    |
 | Utils  |    TODO    |    TODO    |   N/A    |
 
-## Why Flask?
-Because I like Flask; it's flexible and powerful.
 
 ## Getting Started
 
@@ -80,59 +88,28 @@ SCHEDULER_TIMEZONE = 'UTC'
 SCHEDULER_JOBSTORES = {
 	'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
 }
-SCHEDULER_EXECUTORS = {
-	'default': {'type': 'threadpool', 'max_workers': 20}
-}
 SCHEDULER_JOB_DEFAULTS = {
 	'coalesce'     : False,
 	'max_instances': 1
 }
-SCHEDULER_API_ENABLED = True
+SCHEDULER_API_ENABLED = False
 ```
 
 ## Error Handling
 
-When your application raises an error, it sends a custom JSON response with the 
-appropriate status code. An error response has three fields:
+When your application raises an error, it sends a JSON response with the 
+appropriate status code. Non-HTTP errors are converted to `InternalServerError`.
+See the Flask-Rebar [docs on errors](https://flask-rebar.readthedocs.io/en/latest/quickstart/basics.html#errors) for more info.
 
-- `code`: the response status
-- `description`: the error description (can be provided when you `raise` and error or left to the default)
-- `name`: the name/type of the error
+##### Example `Forbidden` response
+In this example we have provided a custom error message and some optional additional data. 
 
-Non-HTTP errors are converted to `InternalServerError`.
-The description for non-HTTP errors **is only shown in a development environment.** 
-Production environments will simply output the default `InternalServerError` description.
-
-##### Example `NotFound` response
-In this example we have provided a custom error message. If we hadn't, the default 404 description would be used. 
 ```json
 {
-  "code": 404, 
-  "description": "User does not exist!", 
-  "name": "Not Found"
+  "msg": "You can't do that!", 
+  "reason": "missing credentials"
 }
 ```
-
-##### Example `ZeroDivisionError` response in a *development* environment
-It is useful to know the actual error during development
-```json
-{
-  "code": 500, 
-  "description": "ZeroDivisionError('division by zero')", 
-  "name": "Internal Server Error"
-}
-
-```
-##### Example `ZeroDivisionError` response in a *production* environment
-The same error as above will look like this in production
-```json
-{
-  "code": 500, 
-  "description": "The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.", 
-  "name": "Internal Server Error"
-}
-```
-
 
 ## Logging
 
