@@ -9,14 +9,25 @@ typical burdens associated with backend development.
 
 
 ## Getting Started
+Note that this template contains example endpoints, models, tests, etc.,
+which serve to demonstrate each feature of the backend. You will most likely
+not need any of the pre-created models or endpoints, but they serve as a good
+starting point for your specific project.
 
-### Create the config file
-Create a `config.py` file under your app module. In this case under `backend`.
-This file is picked up when you create the app and instantiates a number of 
-important variables required for the app to work. It's the place where you will
-store secrets, like database passwords, so **never commit this file to your repository.**
+### Pre-requisites
+- Python 3
+- PostgreSQL drivers (not strictly necessary if you choose a different database)
 
-See the Config section for the minimal requirement for what your config file should look like. 
+### Steps
+1. Clone this repository
+2. Create a virtual environment
+3. Install requirements
+4. Create a PostgreSQL database
+5. Create a `config.py` file and populate it with your config
+6. Run `flask db upgrade` to update the database with the example models 
+    - alternatively, first create your own models in `models.py` and delete the existing migrations
+7. Run the app
+ 
 
 ## REST API ✔️
 Using Flask-Rebar we can easily create robust endpoints with defined input and output
@@ -113,6 +124,11 @@ The scheduler's default timezone is set to `UTC`. Jobs are configured to be stor
 - Protect the scheduler endpoints (if they are exposed)
 
 ## Config ✔️
+Create a `config.py` file under your app module. In this case under `backend`.
+This file is picked up when you create the app and instantiates a number of 
+important variables required for the app to work. It's the place where you will
+store secrets, like database passwords, so **never commit this file to your repository.**
+
 ```python
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
@@ -120,6 +136,11 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 APP_HOST = "localhost"
 APP_PORT = 5000
 SECRET_KEY = "<your_secret_key>"
+
+# AUTH
+AUTH_HEADER = "X-AUTH-API-KEY"
+AUTH_KEY = "<your_auth_key>"
+AUTH_ALLOWED_CLIENT = "client"
 
 # CACHE
 CACHE_CONFIG = {
