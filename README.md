@@ -8,27 +8,6 @@ requisites of a good backend and alleviate the developer from some of the
 typical burdens associated with backend development.
 
 
-## Features
-Click on each feature to read more about it.
-
-| Feature  | Status  |  Description |  Library |
-|---|---|---|---|
-| REST API  |    ✔️    |    Support for input and output schemas    |   Flask-Rebar    |
-| Auth  |    TODO    |    TODO    |   N/A    |
-| Error Handling  |    ✔️   |    Customisable JSON error responses    |   Flask-Rebar    |
-| Logging  |    ✔️  |    Pre-configured, enriched logging with a console handler and a rotating file handler    |   Default Python Logging Library    |
-| Caching  |    ✔️    |    Support for caching endpoints and memoizing functions    |   Flask-Caching    |
-| Scheduler  |    ✔️   |    A scheduler lets you schedule code in your app to be run periodically or at specifc times.    |   Flask-APScheduler (APScheduler)    |
-| Config  |    ✔️    |    A data file used to configure your app. It separates sensitive data from your codebase.    |   Flask    |
-| ORM  |    ✔️    |    Database ORM layer for easy, programmatic database usage   |   Flask-SQLAlchemy (SQLAlchemy)    |
-| Migrations  |    ✔️    |    Handles database changes    |   Flask-Migrate (alembic)    |
-| Tests  |    In Progress    |    Example tests for app creation, endpoints, etc. Uses a mock database.    |   pytest-flask (pytest)    |
-| Coverage  |    TODO    |    TODO    |   N/A    |
-| Auto-documentation  |    ✔️    |    Automatically generate documentation for your endpoints using the OpenAPI spec.    |   Flask-Rebar    |
-| Admin Dashboard  |    TODO    |    TODO    |   N/A    |
-| Utils  |    TODO    |    TODO    |   N/A    |
-
-
 ## Getting Started
 
 ### Create the config file
@@ -40,9 +19,20 @@ store secrets, like database passwords, so **never commit this file to your repo
 See the Config section for the minimal requirement for what your config file should look like. 
 
 ## REST API ✔️
+Using Flask-Rebar we can easily create robust endpoints with defined input and output
+schemas. Despite the heavy focus on creating REST endpoints, we still retain the 
+ability to render templates.
 
 ## Auth 🔄
+Flask-Rebar provides a basic authenticator and support for custom ones. As a starting point,
+this template comes with a default header authenticator that is enabled for all endpoints.
+
+All requests must be sent with the `X-AUTH-API-KEY` header, where its value must match
+the `AUTH_KEY` defined in your `config.py`. The names for the header and the key variable
+are also configurable.
+
 ##### TODO
+- disable auth requirements whilst in dev (?)
 - custom authenticator with scope support
 ## Error Handling ✔️
 When your application raises an error, it sends a JSON response with the 
@@ -110,8 +100,15 @@ app.run(host=app.config['APP_HOST'], port=app.config['APP_PORT'], request_handle
 ```
 
 ## Caching  ✔️
+Support for caching endpoints and memoizing functions using Flask-Caching.
 
 ## Scheduler ✔️
+A scheduler lets you schedule code in your app to be run periodically or at specific times using Flask-APScheduler.
+The current example adds a job during app creation which is defined in `config.py`.
+Since the tasks run outside of any request context, the example demonstrates how you would
+access the database via the application context. 
+
+The scheduler's default timezone is set to `UTC`. Jobs are configured to be stored in your database.
 ##### TODO
 - Protect the scheduler endpoints (if they are exposed)
 
@@ -164,12 +161,17 @@ SCHEDULER_API_ENABLED = False
 ```
 
 ## ORM ✔️
+Database ORM layer for easy, programmatic database usage, using Flask-SQLAlchemy.
 
 ## Migrations ✔️
+Handles database changes using Flask-Migrate.
 
 ## Tests 🔄
+Example tests for app creation, endpoints, etc.
+
 ##### TODO
 - Add database mocking to test examples
+- Add auth tests
 
 ## Coverage ❌
 
@@ -182,5 +184,16 @@ for most projects.
 - documentation generation should be part of the CI/CD pipeline
 
 ## Admin Dashboard ❌
+An admin dashboard allows for non-programmatic access to your backend, allowing
+you to easily make configuration changes and monitor your application in real-time.
 
-## Utils ❌
+##### Proposed features:
+- separate authentication from main app
+- interact with database models
+- preview logs
+- metrics
+- access scheduler API
+
+## Utils ❔
+I might include some useful functions in this template if I can think of anything
+generic enough that deserves a place here.
