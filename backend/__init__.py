@@ -14,7 +14,10 @@ from backend.logger import config
 dictConfig(config)
 
 rebar = Rebar()
-registry = rebar.create_handler_registry()
+registry = rebar.create_handler_registry(
+	swagger_path=None,
+	swagger_ui_path=None
+)
 cache = Cache()
 cors = CORS()
 db = SQLAlchemy()
