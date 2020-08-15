@@ -78,14 +78,11 @@ SCHEDULER_TIMEZONE = 'UTC'
 SCHEDULER_JOBSTORES = {
 	'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
 }
-SCHEDULER_EXECUTORS = {
-	'default': {'type': 'threadpool', 'max_workers': 20}
-}
 SCHEDULER_JOB_DEFAULTS = {
 	'coalesce'     : False,
 	'max_instances': 1
 }
-SCHEDULER_API_ENABLED = True
+SCHEDULER_API_ENABLED = False
 ```
 
 ## Error Handling
