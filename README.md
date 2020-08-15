@@ -11,6 +11,7 @@ typical burdens associated with backend development.
 - Authenticate Scheduler API
 - Authenticate Swagger API
 - General endpoint authentication
+    - custom authenticator with scope support (?)
 - Add database mocking to test examples
 - Admin dashboard
     - Authentication

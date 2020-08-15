@@ -6,7 +6,7 @@ from flask_apscheduler import APScheduler
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_rebar import Rebar
+from flask_rebar import HeaderApiKeyAuthenticator, Rebar
 from flask_sqlalchemy import SQLAlchemy
 
 from backend.logger import config
@@ -33,6 +33,11 @@ def create_app():
 
 	scheduler.init_app(app)
 	scheduler.start()
+
+	authenticator = HeaderApiKeyAuthenticator(header=app.config['AUTH_HEADER'])
+	authenticator.register_key(key=app.config['AUTH_KEY'],
+							   app_name=app.config['AUTH_ALLOWED_CLIENT'])
+	registry.set_default_authenticator(authenticator)
 
 	# IMPORTANT: import the views before rebar initialisation
 	from backend.example.endpoints import get_user
