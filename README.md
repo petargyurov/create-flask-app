@@ -164,7 +164,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 JOBS = [
 	{
 		'id'              : 'example',
-		'func'            : 'backend.tasks.example_task:print_number_of_users',
+		'func'            : 'backend.jobs.example_job:print_number_of_users',
 		'trigger'         : 'interval',
 		'seconds'         : 10,
 		'replace_existing': True,
