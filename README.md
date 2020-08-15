@@ -7,6 +7,16 @@ a REST API. It's purpose is to bootstrap backend projects with all the necessary
 requisites of a good backend and alleviate the developer from some of the
 typical burdens associated with backend development.
 
+## TODO
+- Authenticate Scheduler API
+- Authenticate Swagger API
+- General endpoint authentication
+- Add database mocking to test examples
+- Admin dashboard
+    - Authentication
+- Utils
+    - decide on what to include 
+
 ## Features
 Click on each feature to read more about it.
 
