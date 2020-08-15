@@ -113,6 +113,37 @@ app.run(host=app.config['APP_HOST'], port=app.config['APP_PORT'], request_handle
 ## Caching  ✔️
 Support for caching endpoints and memoizing functions using Flask-Caching.
 
+### Memoization
+When you want to memoize a particular handler it is important to note that there
+is a slight incompatibility with Flask-Rebar's `query_string_schema` API. Because 
+the handler does not receive any arguments, Flask-Caching cannot memoize properly; it
+will simply default to caching instead.
+
+A workaround is to **not** use `query_string_schema` and instead use `use_kwargs` to parse
+the input args as such:
+
+```python
+from webargs.flaskparser import use_kwargs
+
+@registry.handles(
+	rule='/user',
+	method='GET',
+	response_body_schema=UserSchema()
+)
+@use_kwargs(GetUserSchema(strict=True), location='query')
+@cache.memoize(timeout=20)
+def get_user(id):
+	user = User.query.get(id)
+	if not user:
+		raise NotFound
+
+	return {
+		'id'      : user.id,
+		'username': user.username,
+		'email'   : user.email,
+	}
+```
+
 ## Scheduler ✔️
 A scheduler lets you schedule code in your app to be run periodically or at specific times using Flask-APScheduler.
 The current example adds a job during app creation which is defined in `config.py`.

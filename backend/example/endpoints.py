@@ -3,7 +3,7 @@ from flask_rebar.errors import NotFound
 from marshmallow import fields
 from werkzeug.exceptions import NotFound
 
-from backend import cache, rebar, registry
+from backend import rebar, registry
 from backend.models import User
 
 
@@ -23,7 +23,6 @@ class GetUserSchema(ResponseSchema):
 	query_string_schema=GetUserSchema(),
 	response_body_schema=UserSchema()
 )
-@cache.memoize(timeout=20)
 def get_user():
 	args = rebar.validated_args
 	user = User.query.get(args['id'])
