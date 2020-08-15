@@ -13,15 +13,22 @@ config = {
 			'format': '%(asctime)s | %(levelname)s | %(source)s | %(method)s | %(path)s | %(params)s | %(message)s',
 		}},
 	'handlers'  : {
-		'wsgi': {
+		'wsgi'         : {
 			'class'    : 'logging.StreamHandler',
 			'stream'   : 'ext://flask.logging.wsgi_errors_stream',
 			'formatter': 'custom'
+		},
+		'rotating_file': {
+			'class'      : 'logging.handlers.RotatingFileHandler',
+			'filename'   : 'backend.log',
+			'maxBytes'   : 1024 * 1024,
+			'backupCount': 5,
+			'formatter'  : 'custom'
 		}
 	},
 	'root'      : {
 		'level'   : 'INFO',
-		'handlers': ['wsgi']
+		'handlers': ['wsgi', 'rotating_file']
 	}
 }
 
