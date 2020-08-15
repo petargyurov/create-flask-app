@@ -7,16 +7,6 @@ a REST API. It's purpose is to bootstrap backend projects with all the necessary
 requisites of a good backend and alleviate the developer from some of the
 typical burdens associated with backend development.
 
-## TODO
-- Authenticate Scheduler API
-- Authenticate Swagger API
-- General endpoint authentication
-    - custom authenticator with scope support (?)
-- Add database mocking to test examples
-- Admin dashboard
-    - Authentication
-- Utils
-    - decide on what to include 
 
 ## Features
 Click on each feature to read more about it.
@@ -47,8 +37,85 @@ This file is picked up when you create the app and instantiates a number of
 important variables required for the app to work. It's the place where you will
 store secrets, like database passwords, so **never commit this file to your repository.**
 
-Here is a the minimal requirement for what your config file should look like. 
+See the Config section for the minimal requirement for what your config file should look like. 
 
+## REST API ✔️
+
+## Auth 🔄
+##### TODO
+- custom authenticator with scope support
+## Error Handling ✔️
+When your application raises an error, it sends a JSON response with the 
+appropriate status code. Non-HTTP errors are converted to `InternalServerError`.
+See the Flask-Rebar [docs on errors](https://flask-rebar.readthedocs.io/en/latest/quickstart/basics.html#errors) for more info.
+
+##### Example `Forbidden` response
+In this example we have provided a custom error message and some optional additional data. 
+
+```json
+{
+  "msg": "You can't do that!", 
+  "reason": "missing credentials"
+}
+```
+
+## Logging  ✔️
+Logging is a crucial part of any application. The template comes pre-configured 
+with two handlers:
+
+- console output
+- (rotating) file output 
+
+The default output looks like this:
+```
+2020-07-23 16:28:35,502 | ERROR | example.endpoints.get_user::27 | GET | /user | id=4 | 404 NOT FOUND | User with ID=4 not found in database
+2020-07-23 16:29:02,868 | INFO | backend.__init__.log_request::66 | GET | /user | id=1 | 200 OK
+```
+which is based on this format:
+```
+datetime | level | location_in_code | method | path | query_params | status | description
+```
+
+If you don't like something about this format you can easily change it in the config that is 
+defined in `logger.py`
+
+#### Log Enrichment
+
+The `CustomFormatter` class allows us to get more information about errors and other events
+that occur in our app, in particular, the location in code of each error. You can extend this
+class to add other information, for example, adding the user agent.
+
+Note that not all log events that come through will come from requests. As such, you won't
+always have the request context; in these cases it is important to still pass a value
+for all fields that the formatter expects.
+
+#### A Note on the Werkzeug Logger
+The default `werkzeug` logger is hardcoded and difficult to turn off or re-format; for this
+reason it is "softly" turned off, i.e.: its level is set to `ERROR`. This is to avoid
+duplicate logging and to avoid a more complex formatting solution. If you wish to fully
+turn off or to properly customise the output of the default Werkzeug logger, you can
+create a custom request handler that inherits from `WSGIRequestHandler` and overrides
+the `_log` method. 
+
+```python
+from werkzeug.serving import WSGIRequestHandler, _log
+
+class MyRequestHandler(WSGIRequestHandler):
+    def log(self, type, message, *args):
+        pass  # or use _log to pass whatever you want
+```
+Then pass this to your application
+```python
+app.run(host=app.config['APP_HOST'], port=app.config['APP_PORT'], request_handler=MyRequestHandler)
+```
+
+## Caching  ✔️
+
+## Scheduler ✔️
+##### TODO
+- Protect the scheduler endpoints (if they are exposed)
+
+## Config ✔️
 ```python
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 
@@ -96,70 +163,24 @@ SCHEDULER_JOB_DEFAULTS = {
 SCHEDULER_API_ENABLED = False
 ```
 
-## Error Handling
+## ORM ✔️
 
-When your application raises an error, it sends a JSON response with the 
-appropriate status code. Non-HTTP errors are converted to `InternalServerError`.
-See the Flask-Rebar [docs on errors](https://flask-rebar.readthedocs.io/en/latest/quickstart/basics.html#errors) for more info.
+## Migrations ✔️
 
-##### Example `Forbidden` response
-In this example we have provided a custom error message and some optional additional data. 
+## Tests 🔄
+##### TODO
+- Add database mocking to test examples
 
-```json
-{
-  "msg": "You can't do that!", 
-  "reason": "missing credentials"
-}
-```
+## Coverage ❌
 
-## Logging
+## Auto-documentation 🔄
+Flask-Rebar provides support for generating docs based on the OpenAPI (Swagger) spec.
+The Swagger endpoints have been disabled since they shouldn't be accessible in production
+for most projects.
+##### TODO
+- separate documentation generation from app creation
+- documentation generation should be part of the CI/CD pipeline
 
-Logging is a crucial part of any application. The template comes pre-configured 
-with two handlers:
+## Admin Dashboard ❌
 
-- console output
-- (rotating) file output 
-
-The default output looks like this:
-```
-2020-07-23 16:28:35,502 | ERROR | example.endpoints.get_user::27 | GET | /user | id=4 | 404 NOT FOUND | User with ID=4 not found in database
-2020-07-23 16:29:02,868 | INFO | backend.__init__.log_request::66 | GET | /user | id=1 | 200 OK
-```
-which is based on this format:
-```
-datetime | level | location_in_code | method | path | query_params | status | description
-```
-
-If you don't like something about this format you can easily change it in the config that is 
-defined in `logger.py`
-
-#### Log Enrichment
-
-The `CustomFormatter` class allows us to get more information about errors and other events
-that occur in our app, in particular, the location in code of each error. You can extend this
-class to add other information, for example, adding the user agent.
-
-Note that not all log events that come through will come from requests. As such, you won't
-always have the request context; in these cases it is important to still pass a value
-for all fields that the formatter expects.
-
-#### A Note on the Werkzeug Logger
-The default `werkzeug` logger is hardcoded and difficult to turn off or re-format; for this
-reason it is "softly" turned off, i.e.: its level is set to `ERROR`. This is to avoid
-duplicate logging and to avoid a more complex formatting solution. If you wish to fully
-turn off or to properly customise the output of the default Werkzeug logger, you can
-create a custom request handler that inherits from `WSGIRequestHandler` and overrides
-the `_log` method. 
-
-```python
-from werkzeug.serving import WSGIRequestHandler, _log
-
-
-class MyRequestHandler(WSGIRequestHandler):
-    def log(self, type, message, *args):
-        pass  # or use _log to pass whatever you want
-```
-Then pass this to your application
-```python
-app.run(host=app.config['APP_HOST'], port=app.config['APP_PORT'], request_handler=MyRequestHandler)
-```
+## Utils ❌
