@@ -2,6 +2,8 @@ import logging
 from logging.config import dictConfig
 
 from flask import Flask
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_apscheduler import APScheduler
 from flask_caching import Cache
 from flask_cors import CORS
@@ -13,6 +15,7 @@ from backend.logger import config
 
 dictConfig(config)
 
+admin = Admin(name=__name__, template_mode='bootstrap3')
 rebar = Rebar()
 registry = rebar.create_handler_registry(
 	swagger_path=None,
@@ -28,7 +31,9 @@ scheduler = APScheduler()
 def create_app():
 	app = Flask(__name__)
 	app.config.from_pyfile('config.py')
-
+	
+	admin.init_app(app)
+	admin.add_view(ModelView(User, db.session))
 	cache.init_app(app, config=app.config['CACHE_CONFIG'])
 	cors.init_app(app, origins=app.config['ALLOWED_ORIGINS'])
 	db.init_app(app)
